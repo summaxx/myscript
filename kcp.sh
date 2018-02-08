@@ -6,8 +6,8 @@ mkdir kcptun
 tar -xvzf kcptun-linux-amd64-20171201.tar.gz -C kcptun
 cd kcptun
 wget https://raw.githubusercontent.com/summaxx/myscript/master/server-config.json
-wget -P /etc/init.d/ https://raw.githubusercontent.com/summaxx/myscript/master/kcptun.sh
-chmod +x /etc/init.d/kcptun.sh
+wget -P /etc/init.d/ -O kcptun https://raw.githubusercontent.com/summaxx/myscript/master/kcptun.sh
+chmod +x /etc/init.d/kcptun
 chkconfig --add kcptun
 chkconfig kcptun on
 service kcptun start
