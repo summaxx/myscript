@@ -81,11 +81,13 @@ fi
 if [ ${OS} == Ubuntu ] || [ ${OS} == Debian ];then
   apt-get update -y
   apt-get openssl -y
+  osver=0
   wget -P /usr/local/bin https://github.com/summaxx/myscript/raw/master/mtproxy/Debian/mtproto-proxy
 fi
 
 if [ ${OS} == CentOS ];then
   yum install openssl-devel -y
+  osver=$(rpm -q centos-release|cut -d- -f3)
   wget -P /usr/local/bin https://github.com/summaxx/myscript/raw/master/mtproxy/cetnos/mtproto-proxy
 fi
 
@@ -103,6 +105,8 @@ curl -s https://core.telegram.org/getProxyConfig -o /etc/proxy-multi.conf
 echo "${uport}" > /etc/proxy-port
 echo "${SECRET}" > /etc/secret
 
+
+if [ ${osver} == 0 ] || [ ${osver} == 7 ];then
 # 设置 Systemd 服务管理配置
 cat << EOF > /etc/systemd/system/MTProxy.service
 [Unit]
@@ -119,6 +123,29 @@ Restart=on-failure
 WantedBy=multi-user.target
 EOF
 
+
+# 设置开机自启并启动 MTProxy
+systemctl daemon-reload
+systemctl restart MTProxy.service
+systemctl enable MTProxy.service
+
+fi
+
+if [ ${osver} == 6 ];then
+cat << EOF > /etc/init.d/mtproxy
+#!/bin/bash
+# chkconfig: 2345 30 15
+# Description: mtproxy
+
+/usr/local/bin/mtproto-proxy -u nobody -p 65000 -H ${uport} -S ${SECRET} ${NAT} --aes-pwd /etc/proxy-secret /etc/proxy-multi.conf &
+
+EOF
+
+chmod +x /etc/init.d/mtproxy
+chkconfig --add mtproxy
+chkconfig mtproxy on
+/etc/init.d/mtproxy
+fi
 
 # 设置防火墙
 if [ ! -f "/etc/iptables.up.rules" ]; then 
@@ -154,11 +181,6 @@ if [[ ${OS} == CentOS ]];then
 	fi
 fi
 
-
-# 设置开机自启并启动 MTProxy
-systemctl daemon-reload
-systemctl restart MTProxy
-systemctl enable MTProxy.service
 
 
 # 显示服务信息
