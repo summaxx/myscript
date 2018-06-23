@@ -78,6 +78,8 @@ if [[ -n "${NAT}" ]];then
 	NAT="--nat-info "${NAT}
 fi
 
+osbit=$(getconf LONG_BIT)
+
 if [ ${OS} == Ubuntu ] || [ ${OS} == Debian ];then
   apt-get update -y
   apt-get openssl -y
@@ -88,7 +90,12 @@ fi
 if [ ${OS} == CentOS ];then
   yum install openssl-devel -y
   osver=$(rpm -q centos-release|cut -d- -f3)
-  wget -P /usr/local/bin https://github.com/summaxx/myscript/raw/master/mtproxy/cetnos/mtproto-proxy
+  #系统位数判断
+  if [ ${osbit} == 32 ];then
+	wget -P /usr/local/bin https://github.com/summaxx/myscript/raw/master/mtproxy/cetnos/32/mtproto-proxy
+  else
+	wget -P /usr/local/bin https://github.com/summaxx/myscript/raw/master/mtproxy/cetnos/mtproto-proxy
+  fi
 fi
 
 chmod +x /usr/local/bin/mtproto-proxy
