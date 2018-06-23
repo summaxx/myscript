@@ -46,6 +46,7 @@ clear
 echo "---------------------------------------------"
 echo "  Install MTProxy For Telegram with Onekey"
 echo "  Author: 雨落无声"
+echo "  Modify: summax"
 echo "  URL: https://ylws.me"
 echo "  Telegram: https://t.me/ylwsclub"
 echo "---------------------------------------------"
