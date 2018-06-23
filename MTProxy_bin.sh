@@ -71,12 +71,6 @@ if [[ -z "${uport}" ]];then
 	uport="5000"
 fi
 
-# 输入secret
-read -p "Input the Secret for running MTProxy [Default: Autogeneration]： " SECRET
-if [[ -z "${SECRET}" ]];then
-	SECRET=$(openssl rand -hex 16)
-fi
-
 # 输入nat信息
 read -p "Input NAT infomation like <local-addr>:<global-addr> if you are using NAT network, otherwise just press ENTER directly： " NAT
 if [[ -n "${NAT}" ]];then
@@ -86,18 +80,20 @@ fi
 if [ ${OS} == Ubuntu ] || [ ${OS} == Debian ];then
   apt-get update -y
   apt-get openssl -y
+  wget -P /usr/local/bin https://github.com/summaxx/myscript/raw/master/mtproxy/Debian/mtproto-proxy
 fi
 
 if [ ${OS} == CentOS ];then
   yum install openssl-devel -y
+  wget -P /usr/local/bin https://github.com/summaxx/myscript/raw/master/mtproxy/cetnos/mtproto-proxy
 fi
 
+chmod +x /usr/local/bin/mtproto-proxy
+
+SECRET=$(openssl rand -hex 16)
 
 # 获取本机 IP 地址
 IP=$(curl -4 -s ip.sb)
-
-
-# 下载 MTProxy
 
 
 # 生成密钥
@@ -115,7 +111,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/usr/local/bin/
-ExecStart=/usr/local/bin/mtproto-proxy -u nobody -p 64335 -H ${uport} -S ${SECRET} ${TAG} ${NAT} --aes-pwd /etc/proxy-secret /etc/proxy-multi.conf
+ExecStart=/usr/local/bin/mtproto-proxy -u nobody -p 65000 -H ${uport} -S ${SECRET} ${NAT} --aes-pwd /etc/proxy-secret /etc/proxy-multi.conf
 Restart=on-failure
 
 [Install]
