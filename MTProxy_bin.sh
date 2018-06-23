@@ -87,7 +87,7 @@ if [ ${OS} == Ubuntu ] || [ ${OS} == Debian ];then
   wget -P /usr/local/bin https://github.com/summaxx/myscript/raw/master/mtproxy/Debian/mtproto-proxy
 fi
 
-if [ ${OS} == CentOS ];then
+if [[ ${OS} == CentOS ]];then
   yum install openssl-devel -y
   osver=$(rpm -q centos-release|cut -d- -f3)
   #系统位数判断
