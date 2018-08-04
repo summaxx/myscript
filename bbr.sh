@@ -162,8 +162,10 @@ install_config() {
             sed -i 's/^default=.*/default=0/g' /boot/grub/grub.conf
         elif centosversion 7; then
             if [ ! -f "/boot/grub2/grub.cfg" ]; then
-                echo -e "${red}Error:${plain} /boot/grub2/grub.cfg not found, please check it."
-                exit 1
+			    yum install -y grub2
+	            grub2-mkconfig -o /boot/grub2/grub.cfg
+                #echo -e "${red}Error:${plain} /boot/grub2/grub.cfg not found, please check it."
+                #exit 1
             fi
             grub2-set-default 0
         fi
