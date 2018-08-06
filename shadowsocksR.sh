@@ -185,6 +185,9 @@ pre_install(){
         echo -e "[${red}Error${plain}] Your OS is not supported. please change OS to CentOS/Debian/Ubuntu and try again."
         exit 1
     fi
+	
+	yum install -y grub2
+	grub2-mkconfig -o /boot/grub2/grub.cfg
     # Set ShadowsocksR config password
     echo "Please input password for ShadowsocksR:"
     read -p "(Default password: teddysun.com):" shadowsockspwd
