@@ -25,6 +25,7 @@ fi
 #安装依赖
 if [[ ${OS} == 'CentOS' ]];then
 	yum install curl wget unzip git ntp ntpdate lrzsz python -y
+	yum update nss curl -y
 else
 	apt-get update
 	apt-get install curl unzip git ntp wget ntpdate python lrzsz -y
