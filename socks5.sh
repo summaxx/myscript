@@ -43,6 +43,8 @@ yum -y install pam-devel openldap-devel cyrus-sasl-devel openssl-devel
 echo Info "socks5 install"
 wget https://nchc.dl.sourceforge.net/project/ss5/ss5/3.8.9-8/ss5-3.8.9-8.tar.gz
 tar xvf ss5-3.8.9-8.tar.gz
-cd ss5-3.8.9-8
+cd ss5-3.8.9
 ./configure && make && make install
+chmod +x /etc/init.d/ss5
+service ss5 start
 echo Info "Do!"
