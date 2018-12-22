@@ -30,7 +30,7 @@ cp ddclient /usr/sbin/
 mkdir /etc/ddclient
 mkdir /var/cache/ddclient
 cp sample-etc_ddclient.conf /etc/ddclient/ddclient.conf
-
+sed -i "s#daemon=300#daemon=120" /etc/ddclient/ddclient.conf
 echo -e "use=web, web=dynamicdns.park-your-domain.com/getip
 protocol=namecheap 
 server=dynamicdns.park-your-domain.com 
