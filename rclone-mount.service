@@ -15,13 +15,13 @@
 [Unit]
 Description=rclone Amazon Cloud Drive FUSE mount
 Documentation=http://rclone.org/docs/
-After=network-online.target
+After=network.target
 
 [Service]
 User=root
 Group=root
-ExecStart=rclone mount gd:/data /dir/gd --allow-non-empty --allow-other --no-checksum --no-modtime --vfs-cache-max-age 5s --daemon
-ExecStop=/usr/bin/fusermount -uz /path/
+ExecStart=rclone mount gd:/data /dir/gd --allow-non-empty --allow-other --no-checksum --no-modtime --vfs-cache-max-age 5s
+ExecStop=/usr/bin/fusermount -uz /dir/gd
 
 [Install]
-Wants=network-online.target
+WantedBy=multi-user.target
