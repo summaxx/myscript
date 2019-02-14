@@ -11,6 +11,10 @@ import os,time
 SERVER = ""
 CHANGE_ALL = 0
 PORT = 10240
+HOST =  ''
+DOMAIN =  ''
+PASSWD = ''
+
 
 '''
 查询ip 地址的归属地信息
@@ -31,6 +35,21 @@ def getIpcountry():
     except urllib2.HTTPError, ex:
         print "ask error ", ex.code
     return "null"
+
+def ddnsip(ip):
+    url = 'https://dynamicdns.park-your-domain.com/update?host=%s&domain=%s&password=%s&ip=%s' % (HOST, DOMAIN, PASSWD, ip)
+    #print(url)
+    try:
+            req = urllib2.Request(url)
+            res = urllib2.urlopen(req, timeout=10)
+            res = res.read()
+            #print res
+            # 更换成功
+            if res.find('error') == -1:
+                return 1
+    except Exception, ex:
+            print "chang ddns ip error " + ex.message
+    return 0
 
 if __name__ == "__main__":
     '''
@@ -63,9 +82,11 @@ if __name__ == "__main__":
                             s.connect((SERVER, PORT))
                             s.send(js)
                             d = s.recv(32).strip()
-                            print d
+                            #print d
                             s.close()
                             if d == '1':
+                                if HOST != '':
+                                    ddnsip(ip)
                                 print "IP change ok"
                                 with open('/tmp/ip', 'w') as f:
                                     f.write(ip)
