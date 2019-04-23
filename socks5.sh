@@ -25,7 +25,7 @@ else
     apt-get install -y build-essential libssl-dev zlib1g-dev git net-tools 
 	apt-get install -y gcc g++ libtool automake
 	apt-get install -y libsasl2-dev libldap2-dev libssl-dev
-	
+	apt-get install -y libpam0g-dev	
 fi
 echo Info "socks5 install"
 wget https://nchc.dl.sourceforge.net/project/ss5/ss5/3.8.9-8/ss5-3.8.9-8.tar.gz

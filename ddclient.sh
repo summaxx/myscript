@@ -23,7 +23,7 @@ else
 	apt-get install	perl-IO-Socket-SSL -y
 fi
 
-wget https://github.com/summaxx/myscript/raw/master/ddclient-3.8.3.tar.gz
+wget -N --no-check-certificate https://github.com/summaxx/myscript/raw/master/ddclient-3.8.3.tar.gz
 tar -xvf ddclient-3.8.3.tar.gz
 cd ddclient-3.8.3
 cp ddclient /usr/sbin/
