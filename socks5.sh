@@ -28,7 +28,7 @@ else
 	apt-get install -y libpam0g-dev	
 fi
 echo Info "socks5 install"
-wget https://nchc.dl.sourceforge.net/project/ss5/ss5/3.8.9-8/ss5-3.8.9-8.tar.gz
+wget https://github.com/summaxx/myscript/raw/master/ss5-3.8.9-8.tar.gz
 tar xvf ss5-3.8.9-8.tar.gz
 cd ss5-3.8.9
 ./configure && make && make install
