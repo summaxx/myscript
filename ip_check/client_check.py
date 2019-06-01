@@ -8,12 +8,12 @@ import threading
 import sys,json
 import os,time
 
-SERVER = ""
-CHANGE_ALL = 0
-PORT = 10240
-HOST =  ''
-DOMAIN =  ''
-PASSWD = ''
+SERVER = "" #服务器IP
+CHANGE_ALL = 0 #是否替换所有 IP
+PORT = 10240 #服务器端口
+HOST =  ''#ddns 子域名
+DOMAIN =  ''#ddns 主域名
+PASSWD = ''#ddns 密码
 
 
 '''
@@ -33,7 +33,11 @@ def getIpcountry():
             r = json.loads(res)
             return r["ip"]
     except urllib2.HTTPError, ex:
-        print "ask error ", ex.code
+        print "ask error ", ex.message
+    except urllib2.URLError, e1:
+        print "url error", e1.message
+    except ssl.SSLError , e2:
+	    print "ssl error", e2.message
     return "null"
 
 def ddnsip(ip):
@@ -59,12 +63,12 @@ if __name__ == "__main__":
     server.listen(5)
 	'''
     print "client start!"
-    try:
-        while True:
+    while True:
+        try:
             ip = getIpcountry()
             print ip
             if ip == 'null':
-                time.sleep(2)
+                time.sleep(5)
                 continue
             if not os.path.exists('/tmp/ip'):
                 with open('/tmp/ip', 'w') as f:
@@ -84,19 +88,20 @@ if __name__ == "__main__":
                             d = s.recv(32).strip()
                             #print d
                             s.close()
+                            if HOST != '':
+                                ddnsip(ip)
                             if d == '1':
-                                if HOST != '':
-                                    ddnsip(ip)
                                 print "IP change ok"
                                 with open('/tmp/ip', 'w') as f:
                                     f.write(ip)
+                                os.system('reboot')
                         except socket.error:
                             print("Disconnected...")
                             # keep on trying after a disconnect
                             s.close()
-            time.sleep(60)
-    except KeyboardInterrupt, e:
-        pass
+        except KeyboardInterrupt, e:
+            pass
+        time.sleep(300)
     print "server stop"
 
 

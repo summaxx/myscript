@@ -8,7 +8,7 @@ import threading
 import sys,json
 import os,time
 
-SERVER = "" #服务器IP
+SERVER = "j1.vpsee.tk" #服务器IP
 CHANGE_ALL = 0 #是否替换所有 IP
 PORT = 10240 #服务器端口
 HOST =  ''#ddns 子域名
