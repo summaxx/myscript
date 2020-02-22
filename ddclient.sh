@@ -44,6 +44,7 @@ if [ -f "/etc/redhat-release" ];then
 else
    cp sample-etc_rc.d_init.d_ddclient.ubuntu /etc/init.d/ddclient
    update-rc.d ddclient defaults
+   apt-get install libio-socket-ssl-perl -y
 fi
 
 service ddclient start
