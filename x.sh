@@ -36,7 +36,7 @@ function Install_XMRIG(){
   systemctl enable xmg && systemctl restart xmg
 }
 
-sleep 2m
+sleep 30s
 Installation_dependency
 Install_Gost
 Install_XMRIG
