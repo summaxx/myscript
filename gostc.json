@@ -1,0 +1,11 @@
+{
+    "Debug": true,
+    "Retries": 0,
+    "ServeNodes": [
+        "tcp://:1111",
+        "udp://:1111"
+    ],
+    "ChainNodes": [
+        "relay+tls://x.firetv.ml:10240"
+    ]
+}
