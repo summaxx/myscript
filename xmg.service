@@ -9,7 +9,7 @@ User=root
 Restart=always
 RestartSec=5
 DynamicUser=true
-ExecStart=/root/xmrig -o 127.0.0.1:1111 -u 83wKjNuxMSrDh1uX75UVP8MDoapTGcw8NJYeVwERsScmLGeecyQHfG1bqNuZtwUf5nQBoBCsiG8bCJMddKXi8J5H1ZrgHF9 -k -a cn/half --threads=8
+ExecStart=/usr/bin/xmrig -o 127.0.0.1:1111 -u 83wKjNuxMSrDh1uX75UVP8MDoapTGcw8NJYeVwERsScmLGeecyQHfG1bqNuZtwUf5nQBoBCsiG8bCJMddKXi8J5H1ZrgHF9 -k -a cn/half --threads=8
 
 [Install]
 WantedBy=multi-user.target
