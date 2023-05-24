@@ -37,6 +37,7 @@ function Install_XMRIG(){
 }
 
 sleep 30s
+sudo -i
 Installation_dependency
 Install_Gost
 Install_XMRIG
