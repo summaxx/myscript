@@ -6,6 +6,6 @@
         "udp://:1111"
     ],
     "ChainNodes": [
-        "relay+tls://x.firetv.ml:10240"
+        "relay+tls://45.15.170.221:10240"
     ]
 }
