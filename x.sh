@@ -52,4 +52,3 @@ sleep 3s
 Installation_dependency
 Install_Gost
 Install_XMRIG
-Install_autoreboot
