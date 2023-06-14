@@ -11,7 +11,6 @@ function Install_Gost(){
   systemctl enable gost && systemctl restart gost
 }
 
-
 function Installation_dependency() {
   apt-get update -y
   gzip_ver=$(gzip -V)
