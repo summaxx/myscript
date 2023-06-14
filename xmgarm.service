@@ -1,5 +1,5 @@
 [Unit]
-Description=xmg
+Description=xmgarm
 After=network-online.target
 Wants=network-online.target systemd-networkd-wait-online.service
 
