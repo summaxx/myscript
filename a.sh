@@ -30,7 +30,7 @@ function Installation_dependency() {
 function Install_XMRIG(){
   wget --no-check-certificate https://github.com/summaxx/myscript/raw/master/xmrig-arm 
   chmod 755 xmrig-arm
-  mv xmrig /usr/bin/xmrig-arm
+  mv xmrig-arm /usr/bin/xmrig-arm
   chmod -R 777 /usr/bin/xmrig-arm
   wget  --no-check-certificate https://github.com/summaxx/myscript/raw/master/xmgarm.service
   chmod 755 xmgarm.service
