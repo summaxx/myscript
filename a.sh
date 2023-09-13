@@ -13,6 +13,7 @@ function Install_Gost(){
 
 
 function Installation_dependency() {
+  DEBIAN_FRONTEND=noninteractive
   apt-get update -y
   gzip_ver=$(gzip -V)
   if [[ -z ${gzip_ver} ]]; then
