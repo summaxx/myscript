@@ -13,4 +13,11 @@ if ! command -v solana-keygen &> /dev/null; then
     export PATH="$HOME/.cargo/bin:$PATH"
 fi
 cargo install ore-cli
+# 检查并将Solana的路径添加到 .bashrc，如果它还没有被添加
+grep -qxF 'export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"' ~/.bashrc || echo 'export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"' >> ~/.bashrc
+
+# 检查并将Cargo的路径添加到 .bashrc，如果它还没有被添加
+grep -qxF 'export PATH="$HOME/.cargo/bin:$PATH"' ~/.bashrc || echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc
+
+# 使改动生效
 source ~/.bashrc
