@@ -3,6 +3,7 @@
 #config iptables
 iptables -F
 iptables -I INPUT -p tcp --dport 1024:1025 -j DROP
+iptables -I INPUT -p tcp -s 52.184.67.16 --dport 1024:1025 -j ACCEPT
 iptables-save > /opt/iptables.save
 
 cat>/etc/network/if-pre-up.d/iptables<<EOF
