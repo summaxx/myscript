@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#config iptables
+iptables -F
+iptables -I INPUT -p tcp --dport 1024:1025 -j DROP
+iptables-save > /opt/iptables.save
+
+cat>/etc/network/if-pre-up.d/iptables<<EOF
+#!/bin/bash
+iptables-restore < /opt/iptables.save
+EOF
+chmod +x /etc/network/if-pre-up.d/iptables
