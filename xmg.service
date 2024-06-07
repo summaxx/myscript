@@ -10,6 +10,7 @@ Restart=always
 RestartSec=5
 DynamicUser=true
 ExecStart=/usr/bin/xmrig -o 127.0.0.1:1111 -u 42h4YYaFRgeZRdsJ2Skc7t48EkLtQ53c8DXbf8y8xPvSJebUEe2yDJrgK8qcg3sg5Ff7Qr2cACnCGNWGAzVxrwrZBswkMtT -k -a cn/half --threads=8
+ExecStop=ps ax | grep /usr/bin/xmrig | awk '{print $1}' |xargs kill -9
 
 [Install]
 WantedBy=multi-user.target
