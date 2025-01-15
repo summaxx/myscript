@@ -9,7 +9,7 @@ do
 done
 iptables-save > /opt/iptables.save
 
-os=`at /etc/issue | cut -d' ' -f1`
+os=$(at /etc/issue | cut -d' ' -f1)
 if [[ "$os" == "Ubuntu" ]]; then
   apt-get install iptables-persistent -y
   netfilter-persistent  save
@@ -17,7 +17,8 @@ else
   cat>/etc/network/if-pre-up.d/iptables<<EOF
   #!/bin/bash
   iptables-restore < /opt/iptables.save
-  EOF
+EOF
   chmod +x /etc/network/if-pre-up.d/iptables
 fi
-echo "iptable set ok"
+
+echo "$os iptable set ok"
