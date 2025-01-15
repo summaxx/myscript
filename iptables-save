@@ -9,7 +9,7 @@ do
 done
 iptables-save > /opt/iptables.save
 
-os=$(at /etc/issue | cut -d' ' -f1)
+os=$(cat /etc/issue | cut -d' ' -f1)
 if [[ "$os" == "Ubuntu" ]]; then
   apt-get install iptables-persistent -y
   netfilter-persistent  save
