@@ -33,10 +33,10 @@ elif grep -Eqi "centos|red hat|redhat" /proc/version; then
     systemPackage="yum"
 fi
 echo "system: $release"
-if [[ "$release" == "ubuntu" ]]; then
+if [[ $release == "ubuntu" ]]; then
   apt-get install iptables-persistent -y
   netfilter-persistent  save
-else if [[ "$release" == "centos" ]]; then
+elif [[ $release == "centos" ]]; then
   iptables-save > /tmp/iptables.bak
 else
   cat>/etc/network/if-pre-up.d/iptables<<EOF
@@ -45,4 +45,4 @@ else
 EOF
   chmod +x /etc/network/if-pre-up.d/iptables
 fi
-echo "$os iptable set ok"
+echo "iptable set ok"
