@@ -36,6 +36,8 @@ fi
 if [[ "$release" == "ubuntu" ]]; then
   apt-get install iptables-persistent -y
   netfilter-persistent  save
+else if [[ "$release" == "centos" ]]; then
+  iptables-save > /tmp/iptables.bak
 else
   cat>/etc/network/if-pre-up.d/iptables<<EOF
   #!/bin/bash
