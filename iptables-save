@@ -32,7 +32,7 @@ elif grep -Eqi "centos|red hat|redhat" /proc/version; then
     release="centos"
     systemPackage="yum"
 fi
-
+echo "system: $release"
 if [[ "$release" == "ubuntu" ]]; then
   apt-get install iptables-persistent -y
   netfilter-persistent  save
