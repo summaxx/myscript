@@ -1,0 +1,12 @@
+#!/bin/bash
+iptables -F
+iptables -I INPUT -p tcp --dport 3000:3010 -j DROP
+
+cmd=$(echo $@ | sed -e 's/-A/-C/g;s/-I/-C/g')
+${cmd} >/dev/null 2>&1
+if [ $? -gt 0 ]; then
+    cc=$@
+    ${cc}
+fi
+
+iptables-save > /opt/iptables.save
