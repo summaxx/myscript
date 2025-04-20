@@ -10,3 +10,4 @@ exit 0
 END
 chmod +x tt.sh
 echo "/home/user/tt.sh" | sudo tee -a /opt/google/android-studio/bin/studio.sh
+sudo chmod 555 /opt/google/android-studio/bin/studio.sh
