@@ -1,0 +1,60 @@
+#!/bin/bash
+
+#config iptables
+iptables -F
+iptables -X
+iptables -I INPUT -p tcp --dport 3000:3030 -j DROP
+for i in $@
+do
+  iptables -I INPUT -p tcp -s $i --dport 1024:1030 -j ACCEPT
+done
+iptables-save > /opt/iptables.save
+
+if [[ -f /etc/redhat-release ]]; then
+    release="centos"
+    systemPackage="yum"
+elif grep -Eqi "debian|raspbian" /etc/issue; then
+    release="debian"
+    systemPackage="apt"
+elif grep -Eqi "ubuntu" /etc/issue; then
+    release="ubuntu"
+    systemPackage="apt"
+elif grep -Eqi "centos|red hat|redhat" /etc/issue; then
+    release="centos"
+    systemPackage="yum"
+elif grep -Eqi "debian|raspbian" /proc/version; then
+    release="debian"
+    systemPackage="apt"
+elif grep -Eqi "ubuntu" /proc/version; then
+    release="ubuntu"
+    systemPackage="apt"
+elif grep -Eqi "centos|red hat|redhat" /proc/version; then
+    release="centos"
+    systemPackage="yum"
+fi
+echo "system: $release"
+if [[ $release == "ubuntu" ]]; then
+  apt-get install iptables-persistent -y
+  netfilter-persistent  save
+elif [[ $release == "centos" ]]; then
+  iptables-save > /tmp/iptables.bak
+else
+  cat>/etc/network/if-pre-up.d/iptables<<EOF
+#!/bin/bash
+iptables-restore < /opt/iptables.save
+EOF
+  chmod +x /etc/network/if-pre-up.d/iptables
+fi
+grep -q "net.ipv6.conf.all.disable_ipv6=1" /etc/sysctl.conf
+if [ $? == 1 ]; then
+#echo "modify sysctl.conf to disable IPv6"
+  cat>>/etc/sysctl.conf<<EOF
+net.ipv6.conf.all.disable_ipv6=1
+net.ipv6.conf.default.disable_ipv6=1
+net.ipv6.conf.lo.disable_ipv6=1
+EOF
+  sysctl -p
+else
+    echo "Do not modify sysctl.conf"
+fi
+echo "iptable set ok"
