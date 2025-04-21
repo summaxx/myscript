@@ -6,7 +6,7 @@ iptables -X
 iptables -I INPUT -p tcp --dport 3000:3030 -j DROP
 for i in $@
 do
-  iptables -I INPUT -p tcp -s $i --dport 1024:1030 -j ACCEPT
+  iptables -I INPUT -p tcp -s $i --dport 3000:3030 -j ACCEPT
 done
 iptables-save > /opt/iptables.save
 
