@@ -2,6 +2,7 @@
 wget https://github.com/summaxx/myscript/raw/refs/heads/master/xg.sh && chmod +x xg.sh
 wget https://github.com/summaxx/myscript/raw/refs/heads/master/gcpnezhe.sh && chmod +x gcpnezhe.sh
 env NZ_SERVER=nz.tim.cx:8008 NZ_TLS=false NZ_CLIENT_SECRET=Fb35iO5oxQK2GhcMjlxTwUXiqAql4th4 ./gcpnezhe.sh
+cp /etc/systemd/system/nezha-agent.service .
 cat <<END >> tt.sh
 #!/bin/bash
 sleep 5
