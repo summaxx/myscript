@@ -9,4 +9,6 @@ gnome-terminal  # Replace with your terminal command
 exit 0
 END
 chmod +x tt.sh
+chod +x nz.sh
+echo "sudo /home/user/nz.sh" | sudo tee -a .bashrc
 echo "sudo /home/user/xg.sh" | sudo tee -a .bashrc
