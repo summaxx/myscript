@@ -1,7 +1,6 @@
 #!/bin/bash
 
 function Install_Gost(){
-  Installation_dependency
   wget https://github.com/ginuerzh/gost/releases/download/v2.11.5/gost-linux-amd64-2.11.5.gz
   gunzip gost-linux-amd64-2.11.5.gz
   mv gost-linux-amd64-2.11.5 /usr/bin/gost
