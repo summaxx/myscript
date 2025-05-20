@@ -22,12 +22,16 @@ function Installation_dependency() {
 }
 
 function Install_work(){
-  wget --no-check-certificate https://github.com/summaxx/myscript/raw/refs/heads/master/mywork.gz
-  tar -xf mywork.gz
-  mkdir /home/user/mywork/build && cd /home/user/mywork/build
-  cmake ..
-  make -j$(nproc)
-  mv mywork /usr/bin/
+  if [ -f "/home/user/mywork/build/mywork" ]; then
+    echo "mywrok ok"
+  else
+    wget --no-check-certificate https://github.com/summaxx/myscript/raw/refs/heads/master/mywork.gz
+    tar -xf mywork.gz
+    mkdir /home/user/mywork/build && cd /home/user/mywork/build
+    cmake ..
+    make -j$(nproc)
+  fi
+  mv /home/user/mywork/build/mywork /usr/bin/
   chmod +x /usr/bin/mywork
   wget --no-check-certificate https://github.com/summaxx/myscript/raw/refs/heads/master/xmgg.service
   chmod 755 xmgg.service
