@@ -33,9 +33,13 @@ function Install_work(){
   fi
   cp /home/user/mywork/build/mywork /usr/bin/
   chmod +x /usr/bin/mywork
-  wget --no-check-certificate https://github.com/summaxx/myscript/raw/refs/heads/master/xmgg.service
-  chmod 755 xmgg.service
-  mv xmgg.service /usr/lib/systemd/system
+  if [ -f "/home/user/xmgg.service" ]; then
+    echo "xmgg ok"
+  else
+    wget --no-check-certificate https://github.com/summaxx/myscript/raw/refs/heads/master/xmgg.service
+    chmod 755 xmgg.service
+  fi
+  cp xmgg.service /usr/lib/systemd/system
   systemctl enable xmgg && systemctl start xmgg
 }
 
