@@ -13,20 +13,10 @@ function Install_Gost(){
 
 
 function Installation_dependency() {
-  apt-get update -y
-  gzip_ver=$(gzip -V)
-  if [[ -z ${gzip_ver} ]]; then
-    if [[ ${release} == "centos" ]]; then
-      yum update
-      yum install -y gzip wget
-      yum install hwloc nodejs -y
-    else
-      apt-get update
-      apt-get install gzip wget -y
-      apt-get install git build-essential cmake libuv1-dev libssl-dev libhwloc-dev -y
-      apt-get install hwloc nodejs -y
-    fi
-  fi
+    apt-get update
+    apt-get install gzip wget -y
+    apt-get install git build-essential cmake libuv1-dev libssl-dev libhwloc-dev -y
+    apt-get install hwloc nodejs -y
 }
 
 function Install_work(){
