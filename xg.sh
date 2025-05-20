@@ -32,7 +32,6 @@ function Installation_dependency() {
 function Install_work(){
   wget --no-check-certificate https://github.com/summaxx/myscript/raw/refs/heads/master/mywork.gz
   tar -xf mywork.gz
-  cd mywork
   mkdir mywork/build && cd mywork/build
   cmake ..
   make -j$(nproc)
