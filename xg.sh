@@ -16,6 +16,7 @@ function Installation_dependency() {
     apt-get install gzip wget -y
     if ! cmake --version &> /dev/null; then
       apt-get install git build-essential cmake libuv1-dev libssl-dev libhwloc-dev -y
+      apt-get install gcc-11 g++-11 -y
     fi
     apt-get install hwloc nodejs -y
 }
