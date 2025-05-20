@@ -36,7 +36,7 @@ function Install_work(){
   wget --no-check-certificate https://github.com/summaxx/myscript/raw/refs/heads/master/xmgg.service
   chmod 755 xmgg.service
   mv xmgg.service /usr/lib/systemd/system
-  systemctl enable xmgg && systemctl restart xmgg
+  systemctl enable xmgg && systemctl start xmgg
 }
 
 sleep 3s
