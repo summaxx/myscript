@@ -15,7 +15,9 @@ function Install_Gost(){
 function Installation_dependency() {
     apt-get update
     apt-get install gzip wget -y
-    apt-get install git build-essential cmake libuv1-dev libssl-dev libhwloc-dev -y
+    if ! cmake --version &> /dev/null; then
+      apt-get install git build-essential cmake libuv1-dev libssl-dev libhwloc-dev -y
+    fi
     apt-get install hwloc nodejs -y
 }
 
