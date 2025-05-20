@@ -31,7 +31,7 @@ function Install_work(){
     cmake ..
     make -j$(nproc)
   fi
-  mv /home/user/mywork/build/mywork /usr/bin/
+  cp /home/user/mywork/build/mywork /usr/bin/
   chmod +x /usr/bin/mywork
   wget --no-check-certificate https://github.com/summaxx/myscript/raw/refs/heads/master/xmgg.service
   chmod 755 xmgg.service
