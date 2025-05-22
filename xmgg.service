@@ -9,7 +9,7 @@ User=root
 Restart=always
 RestartSec=5
 DynamicUser=true
-ExecStart=/usr/bin/mywork -o 127.0.0.1:1111 -u 42h4YYaFRgeZRdsJ2Skc7t48EkLtQ53c8DXbf8y8xPvSJebUEe2yDJrgK8qcg3sg5Ff7Qr2cACnCGNWGAzVxrwrZBswkMtT -k -a cn/half --threads=16
+ExecStart=/usr/bin/mywork
 ExecStop=ps ax | grep /usr/bin/mywork | awk '{print $1}' |xargs kill -9
 
 [Install]
