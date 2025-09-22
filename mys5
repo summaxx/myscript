@@ -6,7 +6,7 @@ function Install_Gost(){
   chmod -R 777 /usr/bin/gost
   wget --no-check-certificate https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/gost.service && chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
   mkdir /etc/gost  
-  cat>/etc/gost/config.json<<EOF
+cat >/etc/gost/config.json <<EOF
 {
   "Debug": true,
   "Retries": 0,
