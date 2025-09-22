@@ -32,7 +32,6 @@ function Installation_dependency() {
       apt-get install -y gzip wget
     fi
   fi
-  apt-get install hwloc nodejs -y
 }
 
 Install_Gost
