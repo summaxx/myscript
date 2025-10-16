@@ -12,6 +12,15 @@ cat >/etc/gost/config.json <<EOF
   "Retries": 0,
   "ServeNodes": [
 	  "socks5://:1024"
+  ],
+  "Routes": [
+	{
+		"Retries": 0,
+		"ServeNodes": [
+			"tcp://:12321/geo.iproyal.com:12321",
+			"udp://:12321/geo.iproyal.com:12321"
+		]
+	}
   ]
 }
 EOF
