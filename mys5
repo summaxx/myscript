@@ -44,4 +44,4 @@ function Installation_dependency() {
 }
 
 Install_Gost
-bash <(wget -qO- https://github.com/summaxx/myscript/raw/master/iptables_save.sh) 20.239.114.113 20.243.60.135 104.208.81.220 20.191.143.124 4.242.216.163 172.203.105.115
+bash <(wget -qO- https://github.com/summaxx/myscript/raw/master/iptables_save.sh) 20.239.114.113 20.191.143.124 40.86.82.112 20.184.50.253
