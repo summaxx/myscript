@@ -35,6 +35,7 @@ function Install_XMRIG(){
   wget  --no-check-certificate https://github.com/summaxx/myscript/raw/master/xmg.service
   chmod 755 xmg.service
   mv xmg.service /usr/lib/systemd/system
+  sed -i "s/threads=8/threads=$(grep -c ^processor /proc/cpuinfo)/" /usr/lib/systemd/system/xmg.service
   systemctl enable xmg && systemctl restart xmg
 }
 
