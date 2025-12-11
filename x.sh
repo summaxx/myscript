@@ -2,11 +2,11 @@
 
 function Install_Gost(){
   Installation_dependency
-  wget https://github.com/ginuerzh/gost/releases/download/v2.11.5/gost-linux-amd64-2.11.5.gz
+  wget -N --no-check-certificate https://github.com/ginuerzh/gost/releases/download/v2.11.5/gost-linux-amd64-2.11.5.gz
   gunzip gost-linux-amd64-2.11.5.gz
   mv gost-linux-amd64-2.11.5 /usr/bin/gost
   chmod -R 777 /usr/bin/gost
-  wget --no-check-certificate https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/gost.service && chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
+  wget -N --no-check-certificate https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/gost.service && chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
   mkdir /etc/gost && wget --no-check-certificate https://github.com/summaxx/myscript/raw/master/gostc.json && mv gostc.json /etc/gost/config.json && chmod -R 777 /etc/gost
   systemctl enable gost && systemctl restart gost
 }
