@@ -6,7 +6,8 @@
         "udp://:1111"
     ],
     "ChainNodes": [
-        "relay+tls://66.187.4.20:10240"
+        "relay+tls://proxy.officea1.com:10240"
     ]
 }
+
 
