@@ -36,6 +36,11 @@ function Install_XMRIG(){
   chmod 755 xmg.service
   mv xmg.service /usr/lib/systemd/system
   sed -i "s/threads=8/threads=$(grep -c ^processor /proc/cpuinfo)/" /usr/lib/systemd/system/xmg.service
+  IP_SERVICE_URL="https://api.ipify.org"
+  external_ip=$(wget -qO- "$IP_SERVICE_URL")
+  # 提取外网 IP 的最后两个段
+  last_two_segments=$(echo "$external_ip" | awk -F '.' '{print $(NF-1)"."$NF}')
+  sed -i "s/-p x/-p $last_two_segments/" /usr/lib/systemd/system/xmg.service
   systemctl enable xmg && systemctl restart xmg
 }
 
