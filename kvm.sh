@@ -74,9 +74,9 @@ fi
 # 测试硬件加速
 echo "🔹 正在测试 QEMU 硬件加速..."
 sudo qemu-system-x86_64 -enable-kvm -cpu host -machine accel=kvm -nographic -no-reboot -S &>/dev/null &
+QEMU_PID=$!
 sleep 1
-pkill -f qemu-system-x86_64
-if [ $? -eq 0 ]; then
+if kill "$QEMU_PID" 2>/dev/null; then
     echo "✅ QEMU 可以使用硬件加速"
 else
     echo "⚠️ QEMU 无法使用硬件加速，可能宿主机未开启嵌套虚拟化"
