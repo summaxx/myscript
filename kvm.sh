@@ -45,17 +45,14 @@ fi
 echo "🔹 检测系统包管理器类型..."
 INSTALL_CMD=""
 PKG_NAME="qemu-system-x86"
-
 if command -v apt >/dev/null 2>&1; then
     INSTALL_CMD="sudo apt install -y ${PKG_NAME}"
     echo "🔹 检测到 APT 系统 (Debian/Ubuntu)"
-    
+
     # 清理失效的 bullseye-backports 仓库
-    echo "🛠 清理失效的 bullseye-backports 仓库..."
-    SRC_LIST_FILES=$(grep -l "bullseye-backports" /etc/apt/sources.list /etc/apt/sources.list.d/*.list 2>/dev/null || true)
-    for file in $SRC_LIST_FILES; do
-        sudo sed -i 's/^deb \(.*bullseye-backports.*\)$/#\1/' "$file"
-    done
+    echo "🛠 强制清理 bullseye-backports 仓库..."
+    sudo find /etc/apt -type f -name "*.list" -exec sed -i '/bullseye-backports/s/^/#/' {} \;
+
     sudo apt update
 
 elif command -v dnf >/dev/null 2>&1; then
