@@ -41,44 +41,45 @@ elif echo "$cpu_flags" | grep -q "svm"; then
     fi
 fi
 
-
-echo "🔹 检测系统包管理器类型..."
-INSTALL_CMD=""
 PKG_NAME="qemu-system-x86"
+
+echo "🔹 检测包管理器..."
 if command -v apt >/dev/null 2>&1; then
-    INSTALL_CMD="sudo apt install -y ${PKG_NAME}"
     echo "🔹 检测到 APT 系统 (Debian/Ubuntu)"
-
-    # 清理失效的 bullseye-backports 仓库
-    echo "🛠 强制清理 bullseye-backports 仓库..."
-    sudo find /etc/apt -type f -name "*.list" -exec sed -i '/bullseye-backports/s/^/#/' {} \;
-
+    
+    # 全盘扫描并屏蔽 bullseye-backports
+    echo "🛠 正在屏蔽 bullseye-backports 源..."
+    sudo grep -rl "bullseye-backports" /etc/apt | while read -r file; do
+        echo "   → 屏蔽 $file"
+        sudo sed -i '/bullseye-backports/s/^/#/' "$file"
+    done
+    
+    echo "🔹 更新 APT..."
     sudo apt update
+    
+    # 安装 QEMU
+    if ! command -v qemu-system-x86_64 >/dev/null 2>&1; then
+        echo "⚠️ QEMU 未安装，开始安装..."
+        sudo apt install -y ${PKG_NAME}
+    else
+        echo "✅ QEMU 已安装"
+    fi
 
 elif command -v dnf >/dev/null 2>&1; then
-    INSTALL_CMD="sudo dnf install -y ${PKG_NAME}"
-    echo "🔹 检测到 DNF 系统 (Fedora/RHEL8+/CentOS Stream)"
+    echo "🔹 检测到 DNF 系统"
+    sudo dnf install -y ${PKG_NAME}
 
 elif command -v yum >/dev/null 2>&1; then
-    INSTALL_CMD="sudo yum install -y ${PKG_NAME}"
-    echo "🔹 检测到 YUM 系统 (CentOS7/RHEL7/Rocky/AlmaLinux)"
+    echo "🔹 检测到 YUM 系统"
+    sudo yum install -y ${PKG_NAME}
 
 elif command -v pacman >/dev/null 2>&1; then
-    INSTALL_CMD="sudo pacman -Sy --noconfirm qemu"
-    PKG_NAME="qemu"
-    echo "🔹 检测到 Pacman 系统 (Arch/Manjaro)"
+    echo "🔹 检测到 Pacman 系统"
+    sudo pacman -Sy --noconfirm qemu
 
 else
-    echo "❌ 未检测到支持的包管理器，请手动安装 QEMU"
+    echo "❌ 不支持的系统，请手动安装 QEMU"
     exit 1
-fi
-
-# 检查并安装 QEMU
-if ! command -v qemu-system-x86_64 >/dev/null 2>&1; then
-    echo "⚠️ QEMU 未安装，开始安装..."
-    eval "$INSTALL_CMD"
-else
-    echo "✅ QEMU 已安装"
 fi
 
 # 再次确认安装
