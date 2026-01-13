@@ -41,28 +41,47 @@ elif echo "$cpu_flags" | grep -q "svm"; then
     fi
 fi
 
-# 检查并安装QEMU
-if ! command -v qemu-system-x86_64 >/dev/null 2>&1; then
-    echo "⚠️ qemu-system-x86_64 未安装，准备自动安装..."
-    if command -v apt >/dev/null 2>&1; then
-        echo "🔹 检测到APT系统(Debian/Ubuntu)，开始安装..."
-        sudo apt update
-        sudo apt install -y qemu-system-x86
-    elif command -v dnf >/dev/null 2>&1; then
-        echo "🔹 检测到DNF系统(Fedora/CentOS9+/RHEL8+)，开始安装..."
-        sudo dnf install -y qemu-kvm
-    elif command -v yum >/dev/null 2>&1; then
-        echo "🔹 检测到YUM系统(CentOS7/RHEL7)，开始安装..."
-        sudo yum install -y qemu-kvm
-    elif command -v pacman >/dev/null 2>&1; then
-        echo "🔹 检测到pacman系统(Arch/Manjaro)，开始安装..."
-        sudo pacman -Sy --noconfirm qemu
-    else
-        echo "❌ 未检测到支持的包管理器，请手动安装 qemu-system-x86_64"
-        exit 1
-    fi
+
+echo "🔹 检测系统包管理器类型..."
+INSTALL_CMD=""
+PKG_NAME="qemu-system-x86"
+
+if command -v apt >/dev/null 2>&1; then
+    INSTALL_CMD="sudo apt install -y ${PKG_NAME}"
+    echo "🔹 检测到 APT 系统 (Debian/Ubuntu)"
+    
+    # 清理失效的 bullseye-backports 仓库
+    echo "🛠 清理失效的 bullseye-backports 仓库..."
+    SRC_LIST_FILES=$(grep -l "bullseye-backports" /etc/apt/sources.list /etc/apt/sources.list.d/*.list 2>/dev/null || true)
+    for file in $SRC_LIST_FILES; do
+        sudo sed -i 's/^deb \(.*bullseye-backports.*\)$/#\1/' "$file"
+    done
+    sudo apt update
+
+elif command -v dnf >/dev/null 2>&1; then
+    INSTALL_CMD="sudo dnf install -y ${PKG_NAME}"
+    echo "🔹 检测到 DNF 系统 (Fedora/RHEL8+/CentOS Stream)"
+
+elif command -v yum >/dev/null 2>&1; then
+    INSTALL_CMD="sudo yum install -y ${PKG_NAME}"
+    echo "🔹 检测到 YUM 系统 (CentOS7/RHEL7/Rocky/AlmaLinux)"
+
+elif command -v pacman >/dev/null 2>&1; then
+    INSTALL_CMD="sudo pacman -Sy --noconfirm qemu"
+    PKG_NAME="qemu"
+    echo "🔹 检测到 Pacman 系统 (Arch/Manjaro)"
+
 else
-    echo "✅ 已安装 qemu-system-x86_64"
+    echo "❌ 未检测到支持的包管理器，请手动安装 QEMU"
+    exit 1
+fi
+
+# 检查并安装 QEMU
+if ! command -v qemu-system-x86_64 >/dev/null 2>&1; then
+    echo "⚠️ QEMU 未安装，开始安装..."
+    eval "$INSTALL_CMD"
+else
+    echo "✅ QEMU 已安装"
 fi
 
 # 再次确认安装
