@@ -83,12 +83,92 @@ cat>/opt/gost.json<<EOF
       "handler": {
         "type": "socks5"
       }
-    }
+    },
+	{
+      "name": "service-10",
+      "addr": ":3010",
+      "interface": "10.1.0.14",
+      "handler": {
+        "type": "socks5"
+      }
+    },
+	{
+      "name": "service-11",
+      "addr": ":3011",
+      "interface": "10.1.0.15",
+      "handler": {
+        "type": "socks5"
+      }
+    },
+	{
+      "name": "service-12",
+      "addr": ":3012",
+      "interface": "10.1.0.16",
+      "handler": {
+        "type": "socks5"
+      }
+    },
+	{
+      "name": "service-13",
+      "addr": ":3013",
+      "interface": "10.1.0.17",
+      "handler": {
+        "type": "socks5"
+      }
+    },
+	{
+      "name": "service-14",
+      "addr": ":3014",
+      "interface": "10.1.0.18",
+      "handler": {
+        "type": "socks5"
+      }
+    },
+	{
+      "name": "service-15",
+      "addr": ":3015",
+      "interface": "10.1.0.19",
+      "handler": {
+        "type": "socks5"
+      }
+    },
+	{
+      "name": "service-16",
+      "addr": ":3016",
+      "interface": "10.1.0.20",
+      "handler": {
+        "type": "socks5"
+      }
+    },
+	{
+      "name": "service-17",
+      "addr": ":3017",
+      "interface": "10.1.0.21",
+      "handler": {
+        "type": "socks5"
+      }
+    },
+	{
+      "name": "service-18",
+      "addr": ":3018",
+      "interface": "10.1.0.22",
+      "handler": {
+        "type": "socks5"
+      }
+    },
+	{
+      "name": "service-19",
+      "addr": ":3019",
+      "interface": "10.1.0.23",
+      "handler": {
+        "type": "socks5"
+      }
+    },
   ]
 }
 EOF
 
-wget https://github.com/go-gost/gost/releases/download/v3.2.7-nightly.20251122/gost_3.2.7-nightly.20251122_linux_amd64.tar.gz -O gost.tar.gz
+wget https://github.com/go-gost/gost/releases/download/v3.0.0-nightly.20250207/gost_3.0.0-nightly.20250207_linux_amd64.tar.gz -O gost.tar.gz
 tar -vxf gost.tar.gz
 mv gost /usr/bin/
 cat>/usr/lib/systemd/system/gost.service<<EOF
@@ -124,7 +204,7 @@ chmod +x /etc/network/if-pre-up.d/iptables
 
 #config network
 cat>>/etc/network/interfaces<<EOF
-auto eth0:1 eth0:2 eth0:3 eth0:4 eth0:5 eth0:6 eth0:7 eth0:8 eth0:9
+auto eth0:1 eth0:2 eth0:3 eth0:4 eth0:5 eth0:6 eth0:7 eth0:8 eth0:9 eth0:10 eth0:11 eth0:12 eth0:13 eth0:14 eth0:15 eth0:16 eth0:17 eth0:18 eth0:19
 iface eth0:1 inet static
 address 10.1.0.5
 netmask 255.255.255.0
@@ -151,6 +231,36 @@ address 10.1.0.12
 netmask 255.255.255.0
 iface eth0:9 inet static
 address 10.1.0.13
+netmask 255.255.255.0
+iface eth0:10 inet static
+address 10.1.0.14
+netmask 255.255.255.0
+iface eth0:11 inet static
+address 10.1.0.15
+netmask 255.255.255.0
+iface eth0:12 inet static
+address 10.1.0.16
+netmask 255.255.255.0
+iface eth0:13 inet static
+address 10.1.0.17
+netmask 255.255.255.0
+iface eth0:14 inet static
+address 10.1.0.18
+netmask 255.255.255.0
+iface eth0:15 inet static
+address 10.1.0.19
+netmask 255.255.255.0
+iface eth0:16 inet static
+address 10.1.0.20
+netmask 255.255.255.0
+iface eth0:17 inet static
+address 10.1.0.21
+netmask 255.255.255.0
+iface eth0:18 inet static
+address 10.1.0.22
+netmask 255.255.255.0
+iface eth0:19 inet static
+address 10.1.0.23
 netmask 255.255.255.0
 EOF
 
