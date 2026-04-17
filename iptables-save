@@ -1,60 +1,98 @@
 #!/bin/bash
+# config iptables
 
-#config iptables
+# --- 解析参数 ---
+PORT_RANGE="1024:1030"
+ALLOWED_IPS=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --port-range)
+      PORT_RANGE="$2"
+      shift 2
+      ;;
+    --port-range=*)
+      PORT_RANGE="${1#*=}"
+      shift
+      ;;
+    *)
+      ALLOWED_IPS+=("$1")
+      shift
+      ;;
+  esac
+done
+
+# 验证端口范围格式
+if ! [[ "$PORT_RANGE" =~ ^[0-9]+:[0-9]+$ ]]; then
+  echo "错误：端口范围格式无效，应为 START:END（如 3000:3050）"
+  exit 1
+fi
+
+PORT_START="${PORT_RANGE%%:*}"
+PORT_END="${PORT_RANGE##*:}"
+
+if (( PORT_START > PORT_END || PORT_END > 65535 )); then
+  echo "错误：端口范围无效（START <= END <= 65535）"
+  exit 1
+fi
+
+echo "端口范围: $PORT_RANGE"
+echo "允许的 IP: ${ALLOWED_IPS[*]:-（无，仅封锁）}"
+
+# --- 配置 iptables ---
 iptables -F
 iptables -X
-iptables -I INPUT -p tcp --dport 1024:1030 -j DROP
-for i in $@
-do
-  iptables -I INPUT -p tcp -s $i --dport 1024:1030 -j ACCEPT
+iptables -I INPUT -p tcp --dport "$PORT_RANGE" -j DROP
+
+for ip in "${ALLOWED_IPS[@]}"; do
+  iptables -I INPUT -p tcp -s "$ip" --dport "$PORT_RANGE" -j ACCEPT
 done
+
 iptables-save > /opt/iptables.save
 
+# --- 检测发行版 ---
 if [[ -f /etc/redhat-release ]]; then
-    release="centos"
-    systemPackage="yum"
+    release="centos"; systemPackage="yum"
 elif grep -Eqi "debian|raspbian" /etc/issue; then
-    release="debian"
-    systemPackage="apt"
+    release="debian"; systemPackage="apt"
 elif grep -Eqi "ubuntu" /etc/issue; then
-    release="ubuntu"
-    systemPackage="apt"
+    release="ubuntu"; systemPackage="apt"
 elif grep -Eqi "centos|red hat|redhat" /etc/issue; then
-    release="centos"
-    systemPackage="yum"
+    release="centos"; systemPackage="yum"
 elif grep -Eqi "debian|raspbian" /proc/version; then
-    release="debian"
-    systemPackage="apt"
+    release="debian"; systemPackage="apt"
 elif grep -Eqi "ubuntu" /proc/version; then
-    release="ubuntu"
-    systemPackage="apt"
+    release="ubuntu"; systemPackage="apt"
 elif grep -Eqi "centos|red hat|redhat" /proc/version; then
-    release="centos"
-    systemPackage="yum"
+    release="centos"; systemPackage="yum"
 fi
+
 echo "system: $release"
+
 if [[ $release == "ubuntu" ]]; then
   apt-get install iptables-persistent -y
-  netfilter-persistent  save
+  netfilter-persistent save
 elif [[ $release == "centos" ]]; then
   iptables-save > /tmp/iptables.bak
 else
-  cat>/etc/network/if-pre-up.d/iptables<<EOF
+  cat > /etc/network/if-pre-up.d/iptables << 'EOF'
 #!/bin/bash
 iptables-restore < /opt/iptables.save
 EOF
   chmod +x /etc/network/if-pre-up.d/iptables
 fi
+
+# --- 禁用 IPv6 ---
 grep -q "net.ipv6.conf.all.disable_ipv6=1" /etc/sysctl.conf
-if [ $? == 1 ]; then
-#echo "modify sysctl.conf to disable IPv6"
-  cat>>/etc/sysctl.conf<<EOF
+if [[ $? -ne 0 ]]; then
+  cat >> /etc/sysctl.conf << 'EOF'
 net.ipv6.conf.all.disable_ipv6=1
 net.ipv6.conf.default.disable_ipv6=1
 net.ipv6.conf.lo.disable_ipv6=1
 EOF
   sysctl -p
 else
-    echo "Do not modify sysctl.conf"
+  echo "Do not modify sysctl.conf"
 fi
-echo "iptable set ok"
+
+echo "iptables set ok"
