@@ -1,47 +1,66 @@
-function Install_Gost(){
+#!/bin/bash
+
+function Installation_dependency() {
+  # 自动识别包管理器并安装 gzip 和 wget
+  if command -v apt-get >/dev/null 2>&1; then
+    apt-get update -y
+    apt-get install -y gzip wget
+  elif command -v yum >/dev/null 2>&1; then
+    yum install -y gzip wget
+  elif command -v dnf >/dev/null 2>&1; then
+    dnf install -y gzip wget
+  fi
+}
+
+function Install_Gost() {
   Installation_dependency
-  wget https://github.com/ginuerzh/gost/releases/download/v2.11.5/gost-linux-amd64-2.11.5.gz
-  gunzip gost-linux-amd64-2.11.5.gz
-  mv gost-linux-amd64-2.11.5 /usr/bin/gost
-  chmod -R 777 /usr/bin/gost
-  wget --no-check-certificate https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/gost.service && chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
-  mkdir /etc/gost  
-cat >/etc/gost/config.json <<EOF
+
+  # 自动识别系统架构 (Oracle ARM 为 aarch64 -> arm64)
+  ARCH=$(uname -m)
+  case "${ARCH}" in
+    x86_64 | amd64)
+      GOST_ARCH="amd64"
+      ;;
+    aarch64 | arm64)
+      GOST_ARCH="arm64"
+      ;;
+    *)
+      echo "不支持的 CPU 架构: ${ARCH}"
+      exit 1
+      ;;
+  esac
+
+  GOST_VER="2.11.5"
+  FILE_NAME="gost-linux-${GOST_ARCH}-${GOST_VER}"
+
+  # 下载并安装对应架构的 gost
+  wget -O "${FILE_NAME}.gz" "https://github.com/ginuerzh/gost/releases/download/v${GOST_VER}/${FILE_NAME}.gz"
+  gunzip -f "${FILE_NAME}.gz"
+  mv "${FILE_NAME}" /usr/bin/gost
+  chmod +x /usr/bin/gost
+
+  # 配置 systemd 服务
+  wget --no-check-certificate -O /usr/lib/systemd/system/gost.service https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/gost.service
+  chmod 644 /usr/lib/systemd/system/gost.service
+
+  # 写入配置文件
+  mkdir -p /etc/gost
+  cat >/etc/gost/config.json <<EOF
 {
   "Debug": true,
   "Retries": 0,
   "ServeNodes": [
-	  "socks5://:1024"
-  ],
-  "Routes": [
-	{
-		"Retries": 0,
-		"ServeNodes": [
-			"tcp://:12321/geo.iproyal.com:12321",
-			"udp://:12321/geo.iproyal.com:12321"
-		]
-	}
+    "socks5://:1024"
   ]
 }
 EOF
-  chmod -R 777 /etc/gost
-  systemctl enable gost && systemctl restart gost
-}
+  chmod -R 755 /etc/gost
 
-
-function Installation_dependency() {
-  apt-get update -y
-  gzip_ver=$(gzip -V)
-  if [[ -z ${gzip_ver} ]]; then
-    if [[ ${release} == "centos" ]]; then
-      yum update
-      yum install -y gzip wget
-    else
-      apt-get update
-      apt-get install -y gzip wget
-    fi
-  fi
+  # 重载并启动服务
+  systemctl daemon-reload
+  systemctl enable gost
+  systemctl restart gost
 }
 
 Install_Gost
-bash <(wget -qO- https://github.com/summaxx/myscript/raw/master/iptables_save.sh) 40.83.79.63 20.191.143.124 40.86.82.112 20.184.50.253
+bash <(wget -qO- https://github.com/summaxx/myscript/raw/master/iptables-save) 1.1.1.1
